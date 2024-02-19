@@ -1,0 +1,27 @@
+name: Download and Unzip File
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download-and-unzip:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Download File
+      run: |
+        curl -L -o filename.zip "https://huggingface.co/QuickWick/Music-AI-Voices/resolve/main/Trump%2068k/Trump%2068k.zip?download=true"
+
+    - name: Unzip File
+      run: |
+        unzip filename.zip -d ./unzipped_content
+
+    - name: Commit unzipped content
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Actions"
+        git add .
+        git commit -m "Add unzipped content" -a || echo "No changes to commit"
+        git push
